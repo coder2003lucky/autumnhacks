@@ -35,50 +35,27 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFile" text="Load Deck" />
-            <MenuItem mnemonicParsing="false" onAction="#loadFlashcards" text="Import Deck" />
-            <MenuItem mnemonicParsing="false" onAction="#saveDeckToFile" text="Save Deck" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="276.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
-      <children>
-        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
-          <font>
-            <Font size="18.0" />
-          </font>
-        </Label>
-            <ScrollPane fx:id="fSPane" layoutX="100.0" layoutY="60.0" prefHeight="352.0" prefWidth="600.0" />
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="aboutLabel" layoutX="33.0" layoutY="31.0" prefHeight="410.0" prefWidth="734.0" text="Label" />
             <ImageView fitHeight="69.0" fitWidth="74.0" layoutX="712.0" layoutY="14.0">
                <image>
                   <Image url="@../bin/Screen%20Shot%202022-09-11%20at%2010.21.29%20PM.png" />
                </image>
             </ImageView>
-      </children>
+         </children>
     </AnchorPane>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0" spacing="20.0">
          <children>
-            <Button fx:id="fFlashcardsButton" mnemonicParsing="false" onAction="#openCardModeMenu" text="Cards" />
-            <Button mnemonicParsing="false" onAction="#leaveFlashcardMenu" text="Back" />
-            <Button fx:id="fLearnButton" mnemonicParsing="false" onAction="#openLearnModeMenu1" text="Learn" />
+            <Button mnemonicParsing="false" onAction="#leaveAboutMenu" text="Back" />
          </children>
          <padding>
             <Insets bottom="25.0" left="25.0" right="20.0" top="25.0" />

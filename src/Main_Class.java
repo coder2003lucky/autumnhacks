@@ -3,6 +3,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main_Class extends Application{
@@ -24,8 +25,11 @@ public class Main_Class extends Application{
 		
         Scene scene = new Scene(root, 800, 600);
     
-        stage.setTitle("FXML Welcome");
+        stage.setTitle("QILG");
+        stage.setResizable(false);
         stage.setScene(scene);
+        
+        stage.getIcons().add(new Image(Main_Class.class.getResourceAsStream("Screen Shot 2022-09-11 at 10.21.29 PM.png")));
         stage.show();
 	}
 

@@ -37,7 +37,8 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -48,37 +49,9 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" onAction="#loadFlashcards" text="Load Deck" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFileFromCardMenu" text="Load Deck" />
+                  <MenuItem mnemonicParsing="false" onAction="#importDeckFromCardMenu" text="Import Deck" />
+            <MenuItem mnemonicParsing="false" onAction="#saveDeckToFileFromCardMenu" text="Save Deck" />
           </items>
         </Menu>
       </menus>
@@ -86,7 +59,12 @@
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="276.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
             <Button fx:id="flashcard" layoutX="194.0" layoutY="126.0" mnemonicParsing="false" onAction="#fClickFlashcard" prefHeight="221.0" prefWidth="413.0" text="Button" />
-            <Button fx:id="cardModeNextButton" layoutX="379.0" layoutY="357.0" mnemonicParsing="false" onAction="#cardModeShowNext" text="Next" />
+            <Button layoutX="379.0" layoutY="357.0" mnemonicParsing="false" onAction="#cardModeShowNext" text="Next" />
+            <ImageView fitHeight="69.0" fitWidth="74.0" layoutX="717.0" layoutY="4.0">
+               <image>
+                  <Image url="@../bin/Screen%20Shot%202022-09-11%20at%2010.21.29%20PM.png" />
+               </image>
+            </ImageView>
       </children>
     </AnchorPane>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0" spacing="20.0">

@@ -28,13 +28,24 @@ public class Deck {
 		
 	}
 	
-	public void addCard(String front, String back, int correct, int wrong) {
+	public void addCard(String front, String back, int mCorrect, 
+			int mWrong, int tCorrect, int tWrong) {
 		frontSide.add(front);
 		backSide.add(back);
-		numMatchCorrect.add(0);
-		numMatchWrong.add(0);
-		numTextCorrect.add(0);
-		numTextWrong.add(0);
+		numMatchCorrect.add(mCorrect);
+		numMatchWrong.add(mWrong);
+		numTextCorrect.add(tCorrect);
+		numTextWrong.add(tWrong);
+	}
+	
+	public void addCard(String line) {
+		String[] t = line.split("\t");
+		frontSide.add(t[0]);
+		backSide.add(t[1]);
+		numMatchCorrect.add(Integer.parseInt(t[2]));
+		numMatchWrong.add(Integer.parseInt(t[3]));
+		numTextCorrect.add(Integer.parseInt(t[4]));
+		numTextWrong.add(Integer.parseInt(t[5]));
 	}
 	
 	public String getFront(int i) {
@@ -78,7 +89,8 @@ public class Deck {
 	public Deck giveNextFive(int startingFrom) {
 		Deck d = new Deck();
 		for(int i = startingFrom; i<startingFrom+5 && i<getSize(); i++) {
-			d.addCard(this.getFront(i), this.getBack(i), this.getMatchCorrect(i), this.getMatchWrong(i));
+			d.addCard(this.getFront(i), this.getBack(i), this.getMatchCorrect(i), 
+					this.getMatchWrong(i), this.getTextCorrect(i), this.getTextWrong(i));
 		}
 		return d;
 	}

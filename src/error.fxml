@@ -48,9 +48,9 @@
                   <Font name="Andale Mono" size="27.0" />
                </font>
             </Label>
-            <ImageView fitHeight="150.0" fitWidth="182.0" layoutX="146.0" layoutY="25.0">
+            <ImageView fitHeight="175.0" fitWidth="200.0" layoutX="137.0" layoutY="24.0">
                <image>
-                  <Image url="@../../../../Downloads/PngItem_4953880.png" />
+                  <Image url="@PngItem_4953880.png" />
                </image>
             </ImageView>
       </children>

@@ -1,9 +1,11 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -35,6 +38,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -61,7 +66,6 @@ public class Controller implements Initializable{
 	
 	// For card mode
 	private static int currentCard = 0;
-	private Button cardModeNextButton;
 	private boolean cardFacingUp = true;
 
 	private String backColor = "-fx-border-color: #FC3808; -fx-background-color: #FAF3ED;";
@@ -73,7 +77,7 @@ public class Controller implements Initializable{
 	private Label learnQuestion;
 	@FXML
 	private Button learnAnswer0, learnAnswer1, learnAnswer2, learnAnswer3;
-	private int learnCurrentAnswer;
+	private static int learnCurrentAnswer;
 	private String answerDefaultColor = "-fx-border-color: #242423; -fx-background-color: #EBEBE4;";
 	@FXML
 	private Button learnModeNextButton;
@@ -82,7 +86,6 @@ public class Controller implements Initializable{
 	@FXML
 	private AnchorPane learnModePane;
 	private String wrongColor;
-	private static int learnedCardCount = 0;
 	private static boolean isLearnMatchMode = true;
 	@FXML
 	private Label learnAnswer;
@@ -90,6 +93,11 @@ public class Controller implements Initializable{
 	private Button learnThisCorrectButton;
 	
 	private static int learnCurrentDeckStart = 0;
+	
+	private static String content;
+	
+	@FXML
+	private Label aboutLabel, helpLabel;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources){
@@ -99,7 +107,6 @@ public class Controller implements Initializable{
 				long old = 0;
 				if(now-old > (Math.pow(10, 9))) {
 					old = now;
-					//System.out.println(deck);
 				}
 			}
 		};
@@ -116,6 +123,36 @@ public class Controller implements Initializable{
 			}
 		}
 		
+		if(fSPane!=null) {
+			fSPane.setContent(new Text(content));
+		}
+		
+		if(aboutLabel!=null) {
+			Text txt = new Text(
+					"To the immense dissapointment of students all over the world, Quizlet recently put their learn mode behind a paywall.\n" +
+					"QILG, standing for 'Quizlet If Less Greedy', seeks to fix this great tragedy.\n" +
+					"QILG replicates Quizlet's learn mode, allowing students to effectively study.\n" + 
+					"Currently, there are no alternatives to replicate this much-beloved mode.\n" +
+					"Even Anki, a popular flashcard app, is unable to import Quizlet decks. However, QILG is built to."
+					);
+			txt.setFont(new Font("Arial", 14));
+			aboutLabel.setText(txt.getText());
+			aboutLabel.setAlignment(Pos.CENTER);
+			aboutLabel.setWrapText(true);
+		}
+		
+		if(helpLabel!=null) {
+			Text txt = new Text(("Need help importing a deck? Go to the quizlet link. Select export. Use the default settings- tabs between terms & definitions, and new lines between rows. Copy it into an empty text file. Click “Import File” under “File” in the menu bar and navigate this file to import it. You must be in the flashcard menu to do this.\n"
+					+ "\n"
+					+ "Need help loading a deck from a file? File names ending with .deck not only save the terms and definitions, but also your progress. Enter the flashcard menu, go to “File” in the menu bar, and then “Load Deck”. Select a file with a .deck ending. You must be in the flashcard menu to do this.\n"
+					+ "\n"
+					+ "Want to save your progress? No worries! Enter the flashcard menu, go to “File” in the menu bar, and then “Save Deck”. \n"
+					));
+			helpLabel.setText(txt.getText());
+			helpLabel.setAlignment(Pos.CENTER);
+			helpLabel.setWrapText(true);
+			
+		}
 	}
 	
 	@FXML
@@ -123,8 +160,23 @@ public class Controller implements Initializable{
 		Parent root = FXMLLoader.load(getClass().getResource("flashcardMenu.fxml"));
 		
 		Stage primaryStage = (Stage) fButton.getScene().getWindow();
-		primaryStage.setScene(new Scene(root));
+		primaryStage.setScene(new Scene(root));	
+	}
+	
+	@FXML
+	public void openAboutMenu() throws Exception{
+		Parent root = FXMLLoader.load(getClass().getResource("aboutMenu.fxml"));
 		
+		Stage primaryStage = (Stage) fButton.getScene().getWindow();
+		primaryStage.setScene(new Scene(root));	
+	}
+	
+	@FXML
+	public void openHelpMenu() throws Exception{
+		Parent root = FXMLLoader.load(getClass().getResource("helpMenu.fxml"));
+		
+		Stage primaryStage = (Stage) fButton.getScene().getWindow();
+		primaryStage.setScene(new Scene(root));	
 		
 	}
 	
@@ -137,9 +189,79 @@ public class Controller implements Initializable{
 		fileChooser.getExtensionFilters().add(extFilter);
 		File file = fileChooser.showOpenDialog(primaryStage);
 		
-		String content = "";
+		if(file==null) {
+			return;
+		}
+		content = "";
 		
 		deck = new Deck();
+		
+		try {
+			FileInputStream in = new FileInputStream(file);
+			BufferedReader rd = new BufferedReader(new InputStreamReader(in, "UTF-8")); 
+			String line = "";
+			Text txt = new Text();
+			String[] t;
+			
+			while(line!=null) {
+				line = rd.readLine();
+				if(line==null) {
+					break;
+				}
+				content += line + "\n";
+				
+				t = line.split("\t");
+				deck.addCard(t[0], t[1]);
+			}
+			
+			learnCurrentDeckStart = 0;
+			wholeDeck = deck;
+			deck = wholeDeck.giveNextFive(0);
+			
+			txt.setText(content);
+			if(fSPane!=null) {
+				fSPane.setContent(txt);
+			}
+			
+			
+			rd.close();
+			
+			currentQCard = 0;
+			currentCard = 0;
+			isLearnMatchMode = true;
+		}catch(Exception a) {
+			Parent root;
+	        try {
+	            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+	            Stage stage = new Stage();
+	            stage.setTitle("ERROR");
+	            stage.setScene(new Scene(root));
+	            errorLabel.setText("Invalid deck format.");
+	            stage.show();
+	        }
+	        catch (IOException e) {
+	            a.printStackTrace();
+	        }
+	        return;
+		}
+	}
+	
+	@FXML
+	public void importDeckFromCardMenu() throws Exception{
+		Stage primaryStage = (Stage) flashcard.getScene().getWindow();
+		
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showOpenDialog(primaryStage);
+		
+		if(file==null) {
+			return;
+		}
+		content = "";
+		
+		deck = new Deck();
+		
 		
 		FileInputStream in = new FileInputStream(file);
 		BufferedReader rd = new BufferedReader(new InputStreamReader(in, "UTF-8")); 
@@ -147,39 +269,527 @@ public class Controller implements Initializable{
 		Text txt = new Text();
 		String[] t;
 		
-		while(line!=null) {
-			line = rd.readLine();
-			if(line==null) {
-				break;
+		try {
+		
+			while(line!=null) {
+				line = rd.readLine();
+				if(line==null) {
+					break;
+				}
+				content += line + "\n";
+				
+				t = line.split("\t");
+				deck.addCard(t[0], t[1]);
 			}
-			//System.out.println(line);
-			content += line + "\n";
 			
-			t = line.split("\t");
-			//System.out.println(t[0] +" " + t[1]);
-			deck.addCard(t[0], t[1]);
+			learnCurrentDeckStart = 0;
+			wholeDeck = deck;
+			deck = wholeDeck.giveNextFive(0);
+			
+			txt.setText(content);
+			if(fSPane!=null) {
+				fSPane.setContent(txt);
+			}
+			
+			
+			rd.close();
+			
+			currentQCard = 0;
+			currentCard = 0;
+			isLearnMatchMode = true;
+		}catch(Exception a) {
+			Parent root;
+	        try {
+	            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+	            Stage stage = new Stage();
+	            stage.setTitle("ERROR");
+	            stage.setScene(new Scene(root));
+	            errorLabel.setText("Invalid deck format.");
+	            stage.show();
+	        }
+	        catch (IOException e) {
+	            a.printStackTrace();
+	        }
+	        return;
+		}
+	}
+	
+	@FXML
+	public void importDeckFromLearnMenu() throws Exception{
+		Stage primaryStage = (Stage) learnQuestion.getScene().getWindow();
+		
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showOpenDialog(primaryStage);
+		
+		if(file==null) {
+			return;
+		}
+		try {
+			content = "";
+			
+			deck = new Deck();
+			
+			
+			FileInputStream in = new FileInputStream(file);
+			BufferedReader rd = new BufferedReader(new InputStreamReader(in, "UTF-8")); 
+			String line = "";
+			Text txt = new Text();
+			String[] t;
+			
+			while(line!=null) {
+				line = rd.readLine();
+				if(line==null) {
+					break;
+				}
+				content += line + "\n";
+				
+				t = line.split("\t");
+				deck.addCard(t[0], t[1]);
+			}
+			
+			learnCurrentDeckStart = 0;
+			wholeDeck = deck;
+			deck = wholeDeck.giveNextFive(0);
+			
+			txt.setText(content);
+			if(fSPane!=null) {
+				fSPane.setContent(txt);
+			}
+			
+			
+			rd.close();
+			
+			currentQCard = 0;
+			currentCard = 0;
+			isLearnMatchMode = true;
+		}catch(Exception a) {
+			Parent root;
+	        try {
+	            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+	            Stage stage = new Stage();
+	            stage.setTitle("ERROR");
+	            stage.setScene(new Scene(root));
+	            errorLabel.setText("Invalid deck format.");
+	            stage.show();
+	        }
+	        catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        return;
+		}
+	}
+
+	
+	@FXML
+	public void loadDeckFromFile() throws Exception {
+		Stage primaryStage = (Stage) fLearnButton.getScene().getWindow();
+		
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("DECK files (*.deck)", "*.deck");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showOpenDialog(primaryStage);
+		if(file==null) {
+			return;
+		}
+		FileInputStream in = new FileInputStream(file);
+		BufferedReader rd = new BufferedReader(new InputStreamReader(in, "UTF-8")); 
+		
+		try {
+
+			content = "";
+			String line = "";
+			String[] t;
+			deck = new Deck();
+			wholeDeck = new Deck();
+			currentCard = Integer.parseInt(rd.readLine());
+			cardFacingUp = Boolean.parseBoolean(rd.readLine());
+			currentQCard = Integer.parseInt(rd.readLine());
+			learnCurrentAnswer = Integer.parseInt(rd.readLine());
+			isLearnMatchMode = Boolean.parseBoolean(rd.readLine());
+			learnCurrentDeckStart = Integer.parseInt(rd.readLine());
+			
+			int wholeDeckLength = Integer.parseInt(rd.readLine());
+			for(int i = 0; i<wholeDeckLength; i++) {
+				line = rd.readLine();
+				wholeDeck.addCard(line);
+				content += wholeDeck.getFront(i) + "\t" + wholeDeck.getBack(i) +"\n";
+			}
+			int deckLength = Integer.parseInt(rd.readLine());
+			for(int i = 0; i<deckLength; i++) {
+				line = rd.readLine();
+				deck.addCard(line);
+			}
+			
+			Text txt = new Text();
+			
+			
+			txt.setText(content);
+			if(fSPane!=null) {
+				fSPane.setContent(txt);
+			}
+			
+			
+			rd.close();
+			
+			currentQCard = 0;
+			currentCard = 0;
+			isLearnMatchMode = true;
+		}catch(Exception e) {
+			Parent root;
+	        try {
+	            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+	            Stage stage = new Stage();
+	            stage.setTitle("ERROR");
+	            stage.setScene(new Scene(root));
+	            errorLabel.setText("Invalid deck format.");
+	            stage.show();
+	        }
+	        catch (IOException a) {
+	            a.printStackTrace();
+	        }
+	        return;
+		}
+	}
+	
+	@FXML
+	public void saveDeckToFile() throws Exception {
+		if(deck==null || deck.isEmpty() || 
+				wholeDeck==null || wholeDeck.isEmpty()) {
+			 Parent root;
+		        try {
+		            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+		            Stage stage = new Stage();
+		            stage.setTitle("ERROR");
+		            stage.setScene(new Scene(root));
+		            stage.show();
+		        }
+		        catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		        return;
+		}
+		Stage primaryStage;
+		primaryStage = (Stage) fLearnButton.getScene().getWindow();
+		
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("DECK files (*.deck)", "*.deck");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showSaveDialog(primaryStage);
+		if(file==null) {
+			return;
 		}
 		
-		learnCurrentDeckStart = 0;
-		wholeDeck = deck;
-		deck = wholeDeck.giveNextFive(0);
-		//deck.printDeck();
+		PrintWriter writer;
+        writer = new PrintWriter(file);
+        writer.println(currentCard);
+        writer.println(cardFacingUp);
+        writer.println(currentQCard);
+        writer.println(learnCurrentAnswer);
+        writer.println(isLearnMatchMode);
+        writer.println(learnCurrentDeckStart);
+        
+        String line = "";
+        writer.println(wholeDeck.getSize());
+        for(int i = 0; i<wholeDeck.getSize(); i++) {
+        	line += wholeDeck.getFront(i) + "\t";
+        	line += wholeDeck.getBack(i) + "\t";
+        	line += wholeDeck.getMatchCorrect(i) + "\t";
+        	line += wholeDeck.getMatchWrong(i) + "\t";
+        	line += wholeDeck.getTextCorrect(i) + "\t";
+        	line += wholeDeck.getTextWrong(i);
+        	writer.println(line);
+        	line = "";
+        }
+        writer.println(deck.getSize());
+        for(int i = 0; i<deck.getSize(); i++) {
+        	line += deck.getFront(i) + "\t";
+        	line += deck.getBack(i) + "\t";
+        	line += deck.getMatchCorrect(i) + "\t";
+        	line += deck.getMatchWrong(i) + "\t";
+        	line += deck.getTextCorrect(i) + "\t";
+        	line += deck.getTextWrong(i);
+        	writer.println(line);
+        	line = "";
+        }
+        writer.close();
+        
+	}
+	
+	@FXML
+	public void saveDeckToFileFromLearnMenu() throws Exception {
+		if(deck==null || deck.isEmpty() || 
+				wholeDeck==null || wholeDeck.isEmpty()) {
+			 Parent root;
+		        try {
+		            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+		            Stage stage = new Stage();
+		            stage.setTitle("ERROR");
+		            stage.setScene(new Scene(root));
+		            stage.show();
+		        }
+		        catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		        return;
+		}
+		Stage primaryStage;
+		primaryStage = (Stage) learnQuestion.getScene().getWindow();
 		
-		//deck.printDeck();
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("DECK files (*.deck)", "*.deck");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showSaveDialog(primaryStage);
+		if(file==null) {
+			return;
+		}
 		
-		txt.setText(content);
-		fSPane.setContent(txt);
+		PrintWriter writer;
+        writer = new PrintWriter(file);
+        writer.println(currentCard);
+        writer.println(cardFacingUp);
+        writer.println(currentQCard);
+        writer.println(learnCurrentAnswer);
+        writer.println(isLearnMatchMode);
+        writer.println(learnCurrentDeckStart);
+        
+        String line = "";
+        writer.println(wholeDeck.getSize());
+        for(int i = 0; i<wholeDeck.getSize(); i++) {
+        	line += wholeDeck.getFront(i) + "\t";
+        	line += wholeDeck.getBack(i) + "\t";
+        	line += wholeDeck.getMatchCorrect(i) + "\t";
+        	line += wholeDeck.getMatchWrong(i) + "\t";
+        	line += wholeDeck.getTextCorrect(i) + "\t";
+        	line += wholeDeck.getTextWrong(i);
+        	writer.println(line);
+        	line = "";
+        }
+        writer.println(deck.getSize());
+        for(int i = 0; i<deck.getSize(); i++) {
+        	line += deck.getFront(i) + "\t";
+        	line += deck.getBack(i) + "\t";
+        	line += deck.getMatchCorrect(i) + "\t";
+        	line += deck.getMatchWrong(i) + "\t";
+        	line += deck.getTextCorrect(i) + "\t";
+        	line += deck.getTextWrong(i);
+        	writer.println(line);
+        	line = "";
+        }
+        writer.close();
+        
+	}
+	
+	@FXML
+	public void loadDeckFromFileFromLearnMenu() throws Exception {
+		Stage primaryStage = (Stage) learnQuestion.getScene().getWindow();
 		
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("DECK files (*.deck)", "*.deck");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showOpenDialog(primaryStage);
+		if(file==null) {
+			return;
+		}
+		FileInputStream in = new FileInputStream(file);
+		BufferedReader rd = new BufferedReader(new InputStreamReader(in, "UTF-8")); 
 		
-		rd.close();
+		try {
+
+			content = "";
+			String line = "";
+			String[] t;
+			deck = new Deck();
+			wholeDeck = new Deck();
+			currentCard = Integer.parseInt(rd.readLine());
+			cardFacingUp = Boolean.parseBoolean(rd.readLine());
+			currentQCard = Integer.parseInt(rd.readLine());
+			learnCurrentAnswer = Integer.parseInt(rd.readLine());
+			isLearnMatchMode = Boolean.parseBoolean(rd.readLine());
+			learnCurrentDeckStart = Integer.parseInt(rd.readLine());
+			
+			int wholeDeckLength = Integer.parseInt(rd.readLine());
+			for(int i = 0; i<wholeDeckLength; i++) {
+				line = rd.readLine();
+				wholeDeck.addCard(line);
+				content += wholeDeck.getFront(i) + "\t" + wholeDeck.getBack(i) +"\n";
+			}
+			int deckLength = Integer.parseInt(rd.readLine());
+			for(int i = 0; i<deckLength; i++) {
+				line = rd.readLine();
+				deck.addCard(line);
+			}
+			
+			Text txt = new Text();
+			
+			
+			txt.setText(content);
+			if(fSPane!=null) {
+				fSPane.setContent(txt);
+			}
+			
+			
+			rd.close();
+			
+			currentQCard = 0;
+			currentCard = 0;
+			isLearnMatchMode = true;
+		}catch(Exception a) {
+			Parent root;
+	        try {
+	            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+	            Stage stage = new Stage();
+	            stage.setTitle("ERROR");
+	            stage.setScene(new Scene(root));
+	            errorLabel.setText("Invalid deck format.");
+	            stage.show();
+	        }
+	        catch (IOException e) {
+	            a.printStackTrace();
+	        }
+	        return;
+		}
+	}
+	
+	@FXML
+	public void saveDeckToFileFromCardMenu() throws Exception {
+		if(deck==null || deck.isEmpty() || 
+				wholeDeck==null || wholeDeck.isEmpty()) {
+			 Parent root;
+		        try {
+		            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+		            Stage stage = new Stage();
+		            stage.setTitle("ERROR");
+		            stage.setScene(new Scene(root));
+		            stage.show();
+		        }
+		        catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		        return;
+		}
+		Stage primaryStage;
+		primaryStage = (Stage) flashcard.getScene().getWindow();
+		
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("DECK files (*.deck)", "*.deck");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showSaveDialog(primaryStage);
+		if(file==null) {
+			return;
+		}
+		
+		PrintWriter writer;
+        writer = new PrintWriter(file);
+        writer.println(currentCard);
+        writer.println(cardFacingUp);
+        writer.println(currentQCard);
+        writer.println(learnCurrentAnswer);
+        writer.println(isLearnMatchMode);
+        writer.println(learnCurrentDeckStart);
+        
+        String line = "";
+        writer.println(wholeDeck.getSize());
+        for(int i = 0; i<wholeDeck.getSize(); i++) {
+        	line += wholeDeck.getFront(i) + "\t";
+        	line += wholeDeck.getBack(i) + "\t";
+        	line += wholeDeck.getMatchCorrect(i) + "\t";
+        	line += wholeDeck.getMatchWrong(i) + "\t";
+        	line += wholeDeck.getTextCorrect(i) + "\t";
+        	line += wholeDeck.getTextWrong(i);
+        	writer.println(line);
+        	line = "";
+        }
+        writer.println(deck.getSize());
+        for(int i = 0; i<deck.getSize(); i++) {
+        	line += deck.getFront(i) + "\t";
+        	line += deck.getBack(i) + "\t";
+        	line += deck.getMatchCorrect(i) + "\t";
+        	line += deck.getMatchWrong(i) + "\t";
+        	line += deck.getTextCorrect(i) + "\t";
+        	line += deck.getTextWrong(i);
+        	writer.println(line);
+        	line = "";
+        }
+        writer.close();
+        
+	}
+	
+	@FXML
+	public void loadDeckFromFileFromCardMenu() throws Exception {
+		Stage primaryStage = (Stage) flashcard.getScene().getWindow();
+		
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("DECK files (*.deck)", "*.deck");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File file = fileChooser.showOpenDialog(primaryStage);
+		if(file==null) {
+			return;
+		}
+		FileInputStream in = new FileInputStream(file);
+		BufferedReader rd = new BufferedReader(new InputStreamReader(in, "UTF-8")); 
+		
+		try {
+
+			content = "";
+			String line = "";
+			String[] t;
+			deck = new Deck();
+			wholeDeck = new Deck();
+			currentCard = Integer.parseInt(rd.readLine());
+			cardFacingUp = Boolean.parseBoolean(rd.readLine());
+			currentQCard = Integer.parseInt(rd.readLine());
+			learnCurrentAnswer = Integer.parseInt(rd.readLine());
+			isLearnMatchMode = Boolean.parseBoolean(rd.readLine());
+			learnCurrentDeckStart = Integer.parseInt(rd.readLine());
+			
+			int wholeDeckLength = Integer.parseInt(rd.readLine());
+			for(int i = 0; i<wholeDeckLength; i++) {
+				line = rd.readLine();
+				wholeDeck.addCard(line);
+				content += wholeDeck.getFront(i) + "\t" + wholeDeck.getBack(i) +"\n";
+			}
+			int deckLength = Integer.parseInt(rd.readLine());
+			for(int i = 0; i<deckLength; i++) {
+				line = rd.readLine();
+				deck.addCard(line);
+			}
+			
+			Text txt = new Text();
+			
+			
+			txt.setText(content);
+			if(fSPane!=null) {
+				fSPane.setContent(txt);
+			}
+			
+			rd.close();
+			
+			currentQCard = 0;
+			currentCard = 0;
+			isLearnMatchMode = true;
+		}catch(Exception a) {
+			Parent root;
+	        try {
+	            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
+	            Stage stage = new Stage();
+	            stage.setTitle("ERROR");
+	            stage.setScene(new Scene(root));
+	            errorLabel.setText("Invalid deck format.");
+	            stage.show();
+	        }
+	        catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        return;
+		}
 	}
 	
 	@FXML
 	public void fClickFlashcard() {
-		//System.out.println(cardFacingUp);
 		if(cardFacingUp) {
 			cardFacingUp = false;
-			//System.out.println(deck.getBack(currentCard));
 			flashcard.setText(deck.getBack(currentCard));
 			flashcard.setStyle(backColor);
 		}else {
@@ -204,8 +814,8 @@ public class Controller implements Initializable{
 	
 	@FXML
 	public void openCardModeMenu() throws Exception {
-		//System.out.println(1);
-		if(deck==null || deck.isEmpty()) {
+		if(deck==null || deck.isEmpty() || 
+				wholeDeck==null || wholeDeck.isEmpty()) {
 			 Parent root;
 		        try {
 		            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
@@ -224,10 +834,9 @@ public class Controller implements Initializable{
 		Stage primaryStage = (Stage) fFlashcardsButton.getScene().getWindow();
 		primaryStage.setScene(new Scene(root));
 		
-		//System.out.println(flashcard);
 		
 		cardFacingUp = true;
-		//deck.printDeck();
+
 		
 	}
 	
@@ -241,17 +850,48 @@ public class Controller implements Initializable{
 	}
 	
 	@FXML
+	public void leaveAboutMenu() throws Exception {
+		Parent root = FXMLLoader.load(getClass().getResource("flashcardMenu.fxml"));
+		
+		Stage primaryStage = (Stage) aboutLabel.getScene().getWindow();
+		primaryStage.setScene(new Scene(root));
+		
+	}
+	
+	@FXML
+	public void leaveHelpMenu() throws Exception {
+		Parent root = FXMLLoader.load(getClass().getResource("flashcardMenu.fxml"));
+		
+		Stage primaryStage = (Stage) helpLabel.getScene().getWindow();
+		primaryStage.setScene(new Scene(root));
+		
+	}
+	
+	
+	@FXML
 	public void leaveLearnModeMenu() throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("flashcardMenu.fxml"));
 		
 		Stage primaryStage = (Stage) learnQuestion.getScene().getWindow();
 		primaryStage.setScene(new Scene(root));
 		
+		
+	}
+	
+	@FXML
+	public void leaveFlashcardMenu() throws Exception {
+		Parent root = FXMLLoader.load(getClass().getResource("homeMenu.fxml"));
+		
+		Stage primaryStage = (Stage) fSPane.getScene().getWindow();
+		primaryStage.setScene(new Scene(root));
+		
+		
 	}
 	
 	@FXML
 	public void openLearnModeMenu1() throws Exception {
-		if(deck==null || deck.isEmpty()) {
+		if(deck==null || deck.isEmpty() || 
+				wholeDeck==null || wholeDeck.isEmpty()) {
 			 Parent root;
 		        try {
 		            root = FXMLLoader.load(getClass().getClassLoader().getResource("error.fxml"));
@@ -284,7 +924,6 @@ public class Controller implements Initializable{
 	
 	@FXML
 	public void learnAnswer2Clicked() {
-		//System.out.println(1);
 		learnAnswerClicked(2);
 	}
 	
@@ -298,10 +937,11 @@ public class Controller implements Initializable{
 		if(ans == learnCurrentAnswer) { // If answer was correct in match mode
 			System.out.println(deck.getSize());
 			
+			learnModePane.getChildren().remove(learnModeNextButton);
 			learnModePane.getChildren().add(learnModeNextButton);
 			
 		}else {
-			learnModePane.getChildren().remove(learnModeTextField);
+			learnModePane.getChildren().remove(learnModeTextField); // CHANGE
 		}
 		
 	}
@@ -358,7 +998,6 @@ public class Controller implements Initializable{
 	@FXML
 	// Only available to be clicked if answer was correct
 	public void learnModeNextClicked() {
-		//System.out.println(1);
 
 		answeredCorrectly();
 		
@@ -388,6 +1027,20 @@ public class Controller implements Initializable{
 		
 		if(deck.isEmpty()) {
 			deck = newSubDeck(isLearnMatchMode);
+			if(deck.isEmpty()) {
+				learnQuestion.setText("Deck complete! Load again to restart.");
+				learnModePane.getChildren().remove(learnModeTextField);
+				learnModePane.getChildren().remove(learnModeNextButton);
+				learnModePane.getChildren().remove(learnAnswer);
+				learnModePane.getChildren().remove(learnThisCorrectButton);
+				learnModePane.getChildren().remove(learnAnswer0);
+				learnModePane.getChildren().remove(learnAnswer1);
+				learnModePane.getChildren().remove(learnAnswer2);
+				learnModePane.getChildren().remove(learnAnswer3);
+				learnModePane.getChildren().remove(learnModeNextButton);
+				
+				return;
+			}
 			learnSwitchToMatchMode();
 			return;
 		}else {
@@ -418,7 +1071,6 @@ public class Controller implements Initializable{
 	    	}
 	    }
 	    Collections.shuffle(arr);
-	    //System.out.println(arr.toString());
 	    return n > arr.size() ? arr.subList(0, arr.size()) : arr.subList(0, n);
 	}
 	
@@ -520,7 +1172,6 @@ public class Controller implements Initializable{
 			}
 			
 			currentQCard++;
-			learnedCardCount++;
 		}else {
 			wholeDeck.addTextCorrect(wholeDeck.getIndexOf(deck.getFront(currentQCard)), 1);
 			
@@ -531,13 +1182,12 @@ public class Controller implements Initializable{
 			}
 			
 			currentQCard++;
-			learnedCardCount++;
 		}
 	}
 	
 	public Deck newSubDeck(boolean isMatchMode) {
 		if(deck.getSize()<5) {
-			
+			System.out.println("ASfd");
 		}
 		Deck d = new Deck();
 		if(!isMatchMode) {
