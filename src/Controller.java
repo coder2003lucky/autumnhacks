@@ -937,7 +937,8 @@ public class Controller implements Initializable{
 	public void learnAnswerClicked(int ans) {
 		highlightAnswers();
 		if(ans == learnCurrentAnswer) { // If answer was correct in match mode
-			System.out.println(deck.getSize());
+			//deck.printDeck();
+			//System.out.println(deck.getSize());
 			
 			learnModePane.getChildren().remove(learnModeNextButton);
 			learnModePane.getChildren().add(learnModeNextButton);
@@ -987,6 +988,7 @@ public class Controller implements Initializable{
 
 					learnModePane.getChildren().remove(learnAnswer);
 					learnModePane.getChildren().add(learnAnswer);
+					wholeDeck.addTextWrong(currentQCard, 1);
 					learnModePane.getChildren().remove(learnThisCorrectButton);
 					learnModePane.getChildren().add(learnThisCorrectButton);
 					learnAnswer.setText(deck.getBack(currentQCard));
@@ -1018,6 +1020,7 @@ public class Controller implements Initializable{
 		learnTextModeCorrect();
 		learnModeTextField.setStyle("-fx-border-color: black; -fx-background-color: white;");
 		learnModePane.getChildren().remove(learnThisCorrectButton);
+		wholeDeck.addTextWrong(currentQCard, -1);
 	}
 	
 	// Is called if text mode answer was correct
@@ -1168,7 +1171,7 @@ public class Controller implements Initializable{
 			wholeDeck.addMatchCorrect(wholeDeck.getIndexOf(deck.getFront(currentQCard)), 1);
 			
 			
-			if(wholeDeck.getMatchCorrect(i)>=1) { // CHANGE
+			if(wholeDeck.getMatchCorrect(i)>=1) {
 				deck.removeCard(currentQCard);
 				currentQCard--;
 			}
@@ -1177,8 +1180,12 @@ public class Controller implements Initializable{
 		}else {
 			wholeDeck.addTextCorrect(wholeDeck.getIndexOf(deck.getFront(currentQCard)), 1);
 			
-			
-			if(wholeDeck.getTextCorrect(i)>=2) { // CHANGE
+			if(wholeDeck.getTextWrong(i)>0) {
+				if(wholeDeck.getTextCorrect(i)>wholeDeck.getTextWrong(i)*3 || wholeDeck.getTextCorrect(i)>7) {
+					deck.removeCard(currentQCard);
+					currentQCard--;
+				}
+			}else if(wholeDeck.getTextCorrect(i)>=2) {
 				deck.removeCard(currentQCard);
 				currentQCard--;
 			}
@@ -1189,14 +1196,14 @@ public class Controller implements Initializable{
 	
 	public Deck newSubDeck(boolean isMatchMode) {
 		if(deck.getSize()<5) {
-			System.out.println("ASfd");
+			//System.out.println("ASfd");
 		}
 		Deck d = new Deck();
 		if(!isMatchMode) {
 			learnCurrentDeckStart +=5;
 		}
 		d = wholeDeck.giveNextFive(learnCurrentDeckStart);
-		d.printDeck();
+		//d.printDeck();
 		return d;
 	}
 

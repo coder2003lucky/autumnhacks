@@ -64,19 +64,19 @@
             <TextField fx:id="learnModeTextField" layoutX="238.0" layoutY="433.0" onAction="#learnTextFieldAction" prefHeight="26.0" prefWidth="325.0" />
             <Button fx:id="learnAnswer0" layoutX="123.0" layoutY="142.0" mnemonicParsing="false" onAction="#learnAnswer0Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
                <font>
-                  <Font size="30.0" />
+                  <Font size="18.0" />
                </font></Button>
             <Button fx:id="learnAnswer2" layoutX="123.0" layoutY="293.0" mnemonicParsing="false" onAction="#learnAnswer2Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
                <font>
-                  <Font size="30.0" />
+                  <Font size="18.0" />
                </font></Button>
             <Button fx:id="learnAnswer1" layoutX="438.0" layoutY="142.0" mnemonicParsing="false" onAction="#learnAnswer1Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
                <font>
-                  <Font size="30.0" />
+                  <Font size="18.0" />
                </font></Button>
             <Button fx:id="learnAnswer3" layoutX="438.0" layoutY="293.0" mnemonicParsing="false" onAction="#learnAnswer3Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
                <font>
-                  <Font size="30.0" />
+                  <Font size="18.0" />
                </font></Button>
             <Label fx:id="learnQuestion" alignment="CENTER" layoutX="201.0" layoutY="28.0" prefHeight="100.0" prefWidth="408.0" text="Label" textAlignment="CENTER">
                <font>

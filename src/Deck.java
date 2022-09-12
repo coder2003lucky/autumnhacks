@@ -113,13 +113,18 @@ public class Deck {
 	
 	public void addTextWrong(int index, int amount) {
 		numTextWrong.set(index, numTextWrong.get(index)+amount);
+		//System.out.println(1);
 	}
 	
 	public void removeCard(int index) {
+
+		//System.out.println(frontSide.get(index));
 		frontSide.remove(index);
 		backSide.remove(index);
 		numMatchCorrect.remove(index);
 		numMatchWrong.remove(index);
+		numTextCorrect.remove(index);
+		numTextWrong.remove(index);
 	}
 	
 }
