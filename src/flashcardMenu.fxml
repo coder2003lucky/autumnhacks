@@ -52,8 +52,8 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFile" text="Load Deck" />
-            <MenuItem mnemonicParsing="false" onAction="#loadFlashcards" text="Import Deck" />
+            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFile" text="Load Deck (.deck)" />
+            <MenuItem mnemonicParsing="false" onAction="#loadFlashcards" text="Import Deck (.txt)" />
             <MenuItem mnemonicParsing="false" onAction="#saveDeckToFile" text="Save Deck" />
           </items>
         </Menu>

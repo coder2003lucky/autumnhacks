@@ -42,6 +42,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <children>
@@ -49,8 +50,8 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFileFromCardMenu" text="Load Deck" />
-                  <MenuItem mnemonicParsing="false" onAction="#importDeckFromCardMenu" text="Import Deck" />
+            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFileFromCardMenu" text="Load Deck (.deck)" />
+                  <MenuItem mnemonicParsing="false" onAction="#importDeckFromCardMenu" text="Import Deck (.txt)" />
             <MenuItem mnemonicParsing="false" onAction="#saveDeckToFileFromCardMenu" text="Save Deck" />
           </items>
         </Menu>
@@ -58,8 +59,11 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="276.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="flashcard" layoutX="194.0" layoutY="126.0" mnemonicParsing="false" onAction="#fClickFlashcard" prefHeight="221.0" prefWidth="413.0" text="Button" />
-            <Button layoutX="379.0" layoutY="357.0" mnemonicParsing="false" onAction="#cardModeShowNext" text="Next" />
+            <Button fx:id="flashcard" layoutX="194.0" layoutY="126.0" mnemonicParsing="false" onAction="#fClickFlashcard" prefHeight="221.0" prefWidth="413.0" text="Button">
+               <font>
+                  <Font size="30.0" />
+               </font></Button>
+            <Button layoutX="348.0" layoutY="356.0" mnemonicParsing="false" onAction="#cardModeShowNext" prefHeight="26.0" prefWidth="105.0" text="Next" />
             <ImageView fitHeight="69.0" fitWidth="74.0" layoutX="717.0" layoutY="4.0">
                <image>
                   <Image url="@../bin/Screen%20Shot%202022-09-11%20at%2010.21.29%20PM.png" />

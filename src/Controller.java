@@ -132,7 +132,7 @@ public class Controller implements Initializable{
 					"To the immense dissapointment of students all over the world, Quizlet recently put their learn mode behind a paywall.\n" +
 					"QILG, standing for 'Quizlet If Less Greedy', seeks to fix this great tragedy.\n" +
 					"QILG replicates Quizlet's learn mode, allowing students to effectively study.\n" + 
-					"Currently, there are no alternatives to replicate this much-beloved mode.\n" +
+					"Currently, there are no other alternatives to replicate this much-beloved mode.\n" +
 					"Even Anki, a popular flashcard app, is unable to import Quizlet decks. However, QILG is built to."
 					);
 			txt.setFont(new Font("Arial", 14));
@@ -142,11 +142,13 @@ public class Controller implements Initializable{
 		}
 		
 		if(helpLabel!=null) {
-			Text txt = new Text(("Need help importing a deck? Go to the quizlet link. Select export. Use the default settings- tabs between terms & definitions, and new lines between rows. Copy it into an empty text file. Click “Import File” under “File” in the menu bar and navigate this file to import it. You must be in the flashcard menu to do this.\n"
-					+ "\n"
-					+ "Need help loading a deck from a file? File names ending with .deck not only save the terms and definitions, but also your progress. Enter the flashcard menu, go to “File” in the menu bar, and then “Load Deck”. Select a file with a .deck ending. You must be in the flashcard menu to do this.\n"
+			Text txt = new Text(("Need help importing a deck? Go to the quizlet link. Click the three dots, then select export. Use the default settings- tabs between terms & definitions, and new lines between rows. Copy it into an empty text file. Click “Import File” under “File” in the menu bar and navigate to this file to import it. You must be in the flashcard menu to do this.\n"
 					+ "\n"
 					+ "Want to save your progress? No worries! Enter the flashcard menu, go to “File” in the menu bar, and then “Save Deck”. \n"
+					+ "\n"
+					+ "Need help loading a deck from a file? File names ending with .deck not only save the terms and definitions, but also your progress. Enter the flashcard menu, go to “File” in the menu bar, and then “Load Deck”. Select a file with a .deck ending. You must enter the flashcard menu (and exit the learn menu and card menu) to resume the progress of that loaded deck.\n"
+					+ "\n"
+					+ "In learn mode, and don’t see the next button? If you got the answer wrong, then to reveal the next button you must click on the correct (green) card.\n"
 					));
 			helpLabel.setText(txt.getText());
 			helpLabel.setAlignment(Pos.CENTER);

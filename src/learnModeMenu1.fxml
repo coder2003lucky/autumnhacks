@@ -44,6 +44,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <children>
@@ -51,8 +52,8 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFileFromLearnMenu" text="Load Deck" />
-                  <MenuItem mnemonicParsing="false" onAction="#importDeckFromLearnMenu" text="Import Deck" />
+            <MenuItem mnemonicParsing="false" onAction="#loadDeckFromFileFromLearnMenu" text="Load Deck (.deck)" />
+                  <MenuItem mnemonicParsing="false" onAction="#importDeckFromLearnMenu" text="Import Deck (.txt)" />
             <MenuItem mnemonicParsing="false" onAction="#saveDeckToFileFromLearnMenu" text="Save Deck" />
           </items>
         </Menu>
@@ -61,13 +62,32 @@
     <AnchorPane fx:id="learnModePane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="276.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
       <children>
             <TextField fx:id="learnModeTextField" layoutX="238.0" layoutY="433.0" onAction="#learnTextFieldAction" prefHeight="26.0" prefWidth="325.0" />
-            <Button fx:id="learnAnswer0" layoutX="123.0" layoutY="142.0" mnemonicParsing="false" onAction="#learnAnswer0Clicked" prefHeight="127.0" prefWidth="250.0" text="Button" />
-            <Button fx:id="learnAnswer2" layoutX="123.0" layoutY="293.0" mnemonicParsing="false" onAction="#learnAnswer2Clicked" prefHeight="127.0" prefWidth="250.0" text="Button" />
-            <Button fx:id="learnAnswer1" layoutX="438.0" layoutY="142.0" mnemonicParsing="false" onAction="#learnAnswer1Clicked" prefHeight="127.0" prefWidth="250.0" text="Button" />
-            <Button fx:id="learnAnswer3" layoutX="438.0" layoutY="293.0" mnemonicParsing="false" onAction="#learnAnswer3Clicked" prefHeight="127.0" prefWidth="250.0" text="Button" />
-            <Label fx:id="learnQuestion" alignment="CENTER" layoutX="201.0" layoutY="28.0" prefHeight="100.0" prefWidth="408.0" text="Label" textAlignment="CENTER" />
+            <Button fx:id="learnAnswer0" layoutX="123.0" layoutY="142.0" mnemonicParsing="false" onAction="#learnAnswer0Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
+               <font>
+                  <Font size="30.0" />
+               </font></Button>
+            <Button fx:id="learnAnswer2" layoutX="123.0" layoutY="293.0" mnemonicParsing="false" onAction="#learnAnswer2Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
+               <font>
+                  <Font size="30.0" />
+               </font></Button>
+            <Button fx:id="learnAnswer1" layoutX="438.0" layoutY="142.0" mnemonicParsing="false" onAction="#learnAnswer1Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
+               <font>
+                  <Font size="30.0" />
+               </font></Button>
+            <Button fx:id="learnAnswer3" layoutX="438.0" layoutY="293.0" mnemonicParsing="false" onAction="#learnAnswer3Clicked" prefHeight="127.0" prefWidth="250.0" text="Button">
+               <font>
+                  <Font size="30.0" />
+               </font></Button>
+            <Label fx:id="learnQuestion" alignment="CENTER" layoutX="201.0" layoutY="28.0" prefHeight="100.0" prefWidth="408.0" text="Label" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font></Label>
             <Button fx:id="learnModeNextButton" layoutX="355.0" layoutY="433.0" mnemonicParsing="false" onAction="#learnModeNextClicked" prefHeight="26.0" prefWidth="101.0" text="Next" />
-            <Label fx:id="learnAnswer" alignment="CENTER" layoutX="201.0" layoutY="236.0" prefHeight="100.0" prefWidth="408.0" text="Label" textAlignment="CENTER" textFill="#ff0e0e" />
+            <Label fx:id="learnAnswer" alignment="CENTER" layoutX="201.0" layoutY="236.0" prefHeight="100.0" prefWidth="408.0" text="Label" textAlignment="CENTER" textFill="#ff0e0e">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
             <Button fx:id="learnThisCorrectButton" layoutX="592.0" layoutY="433.0" mnemonicParsing="false" onAction="#learnIsCorrectButtonAction" prefHeight="26.0" prefWidth="152.0" text="This is correct" />
             <ImageView fitHeight="69.0" fitWidth="74.0" layoutX="717.0" layoutY="12.0">
                <image>
