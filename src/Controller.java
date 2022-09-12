@@ -293,12 +293,13 @@ public class Controller implements Initializable{
 				fSPane.setContent(txt);
 			}
 			
-			
-			rd.close();
-			
+
 			currentQCard = 0;
 			currentCard = 0;
 			isLearnMatchMode = true;
+			
+			rd.close();
+
 		}catch(Exception a) {
 			Parent root;
 	        try {
@@ -434,10 +435,6 @@ public class Controller implements Initializable{
 			
 			
 			rd.close();
-			
-			currentQCard = 0;
-			currentCard = 0;
-			isLearnMatchMode = true;
 		}catch(Exception e) {
 			Parent root;
 	        try {
@@ -633,10 +630,6 @@ public class Controller implements Initializable{
 			
 			
 			rd.close();
-			
-			currentQCard = 0;
-			currentCard = 0;
-			isLearnMatchMode = true;
 		}catch(Exception a) {
 			Parent root;
 	        try {
@@ -768,9 +761,6 @@ public class Controller implements Initializable{
 			
 			rd.close();
 			
-			currentQCard = 0;
-			currentCard = 0;
-			isLearnMatchMode = true;
 		}catch(Exception a) {
 			Parent root;
 	        try {
