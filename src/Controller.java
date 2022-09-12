@@ -853,7 +853,7 @@ public class Controller implements Initializable{
 	
 	@FXML
 	public void leaveAboutMenu() throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("flashcardMenu.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("homeMenu.fxml"));
 		
 		Stage primaryStage = (Stage) aboutLabel.getScene().getWindow();
 		primaryStage.setScene(new Scene(root));
@@ -862,7 +862,7 @@ public class Controller implements Initializable{
 	
 	@FXML
 	public void leaveHelpMenu() throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("flashcardMenu.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("homeMenu.fxml"));
 		
 		Stage primaryStage = (Stage) helpLabel.getScene().getWindow();
 		primaryStage.setScene(new Scene(root));

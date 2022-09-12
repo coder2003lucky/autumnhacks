@@ -5,11 +5,11 @@ true
 true
 0
 11
-las relaciones personales	personal relationships	1	0	0	0
-la amistad	friendship	0	0	0	0
-el ánimo	spirit; mood	0	0	0	0
-el chisme	gossip	0	0	0	0
-la cita (a ciegas)	(blind) date	0	0	0	0
+las relaciones personales	personal relationships	3	0	2	1
+la amistad	friendship	2	0	1	1
+el ánimo	spirit; mood	2	0	0	-1
+el chisme	gossip	2	0	0	0
+la cita (a ciegas)	(blind) date	2	0	0	0
 el compromiso	commitment; responsibility	0	0	0	0
 el deseo	desire; wish	0	0	0	0
 el divorcio	divorce	0	0	0	0
@@ -17,7 +17,7 @@ la (in)fidelidad	(un)faithfulness; (in)fidelity	0	0	0	0
 el matrimonio	marriage	0	0	0	0
 la pareja	couple	0	0	0	0
 4
-la amistad	friendship	0	0	0	0
-el ánimo	spirit; mood	0	0	0	0
-el chisme	gossip	0	0	0	0
-la cita (a ciegas)	(blind) date	0	0	0	0
+la amistad	friendship	2	0	1	1
+el ánimo	spirit; mood	2	0	0	-1
+el chisme	gossip	2	0	0	0
+la cita (a ciegas)	(blind) date	2	0	0	0
